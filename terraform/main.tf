@@ -3,7 +3,7 @@ provider "aws" {
   region = var.aws_region
 }
 
-# Create a VPC with public and private subnets across multiple AZs [cite: 71]
+# Create a VPC with public and private subnets across multiple AZs 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.0.0"
@@ -19,7 +19,7 @@ module "vpc" {
   single_nat_gateway = true # Cost optimization for assessment
 }
 
-# S3 Bucket for static assets with encryption [cite: 75, 77]
+# S3 Bucket for static assets with encryption 
 resource "aws_s3_bucket" "static_assets" {
   bucket = "${var.project_name}-assets-${var.environment}"
 }
@@ -33,7 +33,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_enc" {
   }
 }
 
-# RDS Instance in a private subnet [cite: 74]
+# RDS Instance in a private subnet 
 resource "aws_db_instance" "app_db" {
   allocated_storage      = 20
   db_name                = "appdb"
@@ -44,11 +44,11 @@ resource "aws_db_instance" "app_db" {
   password               = var.db_password
   db_subnet_group_name   = module.vpc.database_subnet_group
   vpc_security_group_ids = [aws_security_group.db_sg.id]
-  storage_encrypted      = true # Security best practice [cite: 77]
+  storage_encrypted      = true # Security best practice 
   skip_final_snapshot    = true
 }
 
-# Application Load Balancer [cite: 73]
+# Application Load Balancer 
 resource "aws_lb" "app_alb" {
   name               = "${var.project_name}-alb"
   internal           = false
@@ -57,7 +57,7 @@ resource "aws_lb" "app_alb" {
   subnets            = module.vpc.public_subnets
 }
 
-# Security Groups [cite: 76]
+# Security Groups 
 resource "aws_security_group" "alb_sg" {
   name   = "alb-sg"
   vpc_id = module.vpc.vpc_id
@@ -72,5 +72,5 @@ resource "aws_security_group" "alb_sg" {
 resource "aws_security_group" "db_sg" {
   name   = "db-sg"
   vpc_id = module.vpc.vpc_id
-  # Only allow access from application layer (Least Privilege) [cite: 77]
+  # Only allow access from application layer (Least Privilege) 
 }

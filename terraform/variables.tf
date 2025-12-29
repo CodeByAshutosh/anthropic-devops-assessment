@@ -25,5 +25,5 @@ variable "vpc_cidr" {
 variable "db_password" {
   description = "Database administrator password"
   type        = string
-  sensitive   = true # Best practice for sensitive data [cite: 22]
+  sensitive   = true # Best practice for sensitive data 
 }
