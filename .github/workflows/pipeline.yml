@@ -1,0 +1,35 @@
+name: Python-App-CI-CD
+
+on:
+  push:
+    branches: [ main, staging ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Tests
+        [cite_start]run: pip install -r requirements.txt && pytest # Automated testing [cite: 89]
+      - name: Docker Build & Scan
+        run: |
+          docker build -t my-app:${{ github.sha }} .
+          # Placeholder for security scan [cite: 90]
+          echo "Scanning image..."
+
+  deploy-staging:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Staging
+        run: echo "Deploying to Kubernetes Staging"
+
+  deploy-production:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    [cite_start]environment: production # Production approval gate [cite: 93]
+    steps:
+      - name: Deploy to Production
+        run: echo "Deploying to Kubernetes Production"
