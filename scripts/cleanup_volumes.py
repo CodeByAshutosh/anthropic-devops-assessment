@@ -23,6 +23,6 @@ def cleanup_unused_volumes(dry_run=True):
         sys.exit(1)
 
 if __name__ == "__main__":
-    # Configurable via a simple flag for safety [cite: 126]
+    # Configurable via a simple flag for safety
     EXECUTE_DELETION = False # Set to True to actually delete
     cleanup_unused_volumes(dry_run=not EXECUTE_DELETION)
